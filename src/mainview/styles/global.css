@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 224 30% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 30% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 30% 12%;
+    --primary: 216 80% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 224 30% 18%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 46%;
+    --accent: 216 80% 96%;
+    --accent-foreground: 216 80% 42%;
+    --destructive: 0 72% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 216 80% 52%;
+    --radius: 0.75rem;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 15% 30%;
+    --sidebar-primary: 216 80% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 216 60% 96%;
+    --sidebar-accent-foreground: 216 70% 45%;
+    --sidebar-border: 220 13% 92%;
+    --sidebar-ring: 216 80% 52%;
+  }
+
+  .dark {
+    --background: 224 20% 10%;
+    --foreground: 220 20% 92%;
+    --card: 224 18% 13%;
+    --card-foreground: 220 20% 92%;
+    --popover: 224 18% 13%;
+    --popover-foreground: 220 20% 92%;
+    --primary: 216 75% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 224 14% 18%;
+    --secondary-foreground: 220 18% 82%;
+    --muted: 224 14% 16%;
+    --muted-foreground: 220 12% 55%;
+    --accent: 216 40% 16%;
+    --accent-foreground: 216 60% 72%;
+    --destructive: 0 65% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 224 12% 20%;
+    --input: 224 12% 20%;
+    --ring: 216 75% 60%;
+    --sidebar-background: 224 20% 8%;
+    --sidebar-foreground: 220 14% 68%;
+    --sidebar-primary: 216 75% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 216 30% 14%;
+    --sidebar-accent-foreground: 216 55% 72%;
+    --sidebar-border: 224 12% 16%;
+    --sidebar-ring: 216 75% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+}
+
+@layer utilities {
+  /* 玻璃态效果 */
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl;
+  }
+  .dark .glass {
+    @apply bg-white/5 backdrop-blur-xl;
+  }
+
+  /* 精致阴影层次 */
+  .shadow-soft {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.04),
+      0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+  .shadow-elevated {
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.04),
+      0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  .dark .shadow-soft {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.2),
+      0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .dark .shadow-elevated {
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  /* 渐变装饰 */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(216, 80%, 52%), hsl(200, 85%, 50%));
+  }
+  .gradient-warm {
+    background: linear-gradient(135deg, hsl(34, 90%, 55%), hsl(16, 85%, 55%));
+  }
+
+  /* 滚动条美化 - 全局 */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-border/60;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* 更细的滚动条 */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-border;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+
+  /* 密码强度条 */
+  .strength-bar {
+    @apply h-2 rounded-full transition-all duration-500;
+  }
+}

@@ -221,10 +221,14 @@ export default function VaultPage() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `keyvault-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      const filename = `keyvault-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
-      toast({ title: "导出成功" });
+      toast({ 
+        title: "导出成功", 
+        description: `已保存为: ${filename}\n文件已下载到您的默认下载目录` 
+      });
     } catch (e: any) {
       toast({ title: "导出失败", description: e.message, variant: "destructive" });
     }

@@ -251,10 +251,10 @@ export default function AppSidebar({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" side="top" className="min-w-[140px]">
               <DropdownMenuItem onClick={onImport}>
-                <Upload className="mr-2 h-3.5 w-3.5" /> 导入数据
+                <Download className="mr-2 h-3.5 w-3.5" /> 导入数据
               </DropdownMenuItem>
               <DropdownMenuItem onClick={onExport}>
-                <Download className="mr-2 h-3.5 w-3.5" /> 导出数据
+                <Upload className="mr-2 h-3.5 w-3.5" /> 导出数据
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={togglePrivate}>

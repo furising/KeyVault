@@ -52,6 +52,50 @@ jobs:
       - name: Install frontend dependencies
         run: bun install
 
+      # === Sync version from package.json into tauri.conf.json & Cargo.toml ===
+      # 产物文件名（如 KeyVault_x.y.z_aarch64.dmg）由 tauri.conf.json 的 version 决定，
+      # 这里以 package.json 的 version 字段为唯一真实来源，避免出现 tag 与产物版本不一致。
+      - name: Sync version from package.json
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [ -z "$VERSION" ] || [ "$VERSION" = "undefined" ]; then
+            echo "❌ Cannot read version from package.json"
+            exit 1
+          fi
+          export VERSION
+          echo "Syncing version to: $VERSION (from package.json)"
+
+          # 1) src-tauri/tauri.conf.json
+          node -e "
+            const fs = require('fs');
+            const p = 'src-tauri/tauri.conf.json';
+            const j = JSON.parse(fs.readFileSync(p, 'utf8'));
+            j.version = process.env.VERSION;
+            fs.writeFileSync(p, JSON.stringify(j, null, 2) + '\n');
+          "
+
+          # 2) src-tauri/Cargo.toml: 仅替换 [package] 段顶部第一个 version = "..."
+          awk -v ver="$VERSION" '
+            BEGIN { in_pkg = 0; done = 0 }
+            /^\[package\]/ { in_pkg = 1; print; next }
+            /^\[/ && !/^\[package\]/ { in_pkg = 0 }
+            {
+              if (in_pkg && !done && $0 ~ /^version[[:space:]]*=/) {
+                print "version = \"" ver "\""
+                done = 1
+                next
+              }
+              print
+            }
+          ' src-tauri/Cargo.toml > src-tauri/Cargo.toml.tmp
+          mv src-tauri/Cargo.toml.tmp src-tauri/Cargo.toml
+
+          echo '--- tauri.conf.json version ---'
+          grep '"version"' src-tauri/tauri.conf.json | head -n 1
+          echo '--- Cargo.toml [package] version ---'
+          awk '/^\[package\]/{flag=1;next} /^\[/{flag=0} flag && /^version[[:space:]]*=/{print; exit}' src-tauri/Cargo.toml
+
       # === Windows code signing: import certificate ===
       - name: Import Windows code signing certificate
         if: runner.os == 'Windows'

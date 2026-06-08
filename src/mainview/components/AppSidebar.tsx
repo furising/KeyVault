@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useGroupStore } from "@/stores/groupStore";
 import { groupApi } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import {
   Group,
   Plus,
@@ -73,7 +72,7 @@ export default function AppSidebar({
     unlockGroup,
     isGroupUnlocked,
   } = useGroupStore();
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [createType, setCreateType] = useState<"normal" | "private" | null>(null);
   const [editGroup, setEditGroup] = useState<{ id: number; name: string; groupPassword?: string } | null>(null);
   const [editUngrouped, setEditUngrouped] = useState(false);
   const [showHotkeySettings, setShowHotkeySettings] = useState(false);
@@ -171,21 +170,24 @@ export default function AppSidebar({
       {/* 分组标题 */}
       <div className="flex items-center justify-between px-5 pb-2">
         <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">分组</span>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground transition-colors hover:text-foreground"
-                onClick={() => setShowCreateForm(true)}
-              >
-                <Plus className="h-3.5 w-3.5" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={4}>
-              新建分组
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none"
+              title="新建分组"
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-[140px]">
+            <DropdownMenuItem onClick={() => setCreateType("normal")}>
+              <Group className="mr-2 h-3.5 w-3.5" /> 普通分组
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setCreateType("private")}>
+              <EyeOff className="mr-2 h-3.5 w-3.5" /> 私密分组
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* 导航列表 */}
@@ -285,9 +287,12 @@ export default function AppSidebar({
 
       {/* 弹窗 */}
       <GroupForm
-        open={showCreateForm}
-        onClose={() => setShowCreateForm(false)}
+        open={createType !== null}
+        onClose={() => setCreateType(null)}
         onSubmit={(name, isPrivate, groupPassword) => createGroup(name, isPrivate, groupPassword || undefined)}
+        initialPrivate={createType === "private"}
+        hidePrivateToggle
+        title={createType === "private" ? "新建私密分组" : "新建分组"}
       />
       {editGroup && (
         <GroupForm

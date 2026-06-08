@@ -104,6 +104,15 @@ export default function GroupForm({
               </div>
             </label>
           )}
+          {hidePrivateToggle && isPrivate && (
+            <div className="flex items-center gap-2.5 rounded-lg bg-amber-500/10 px-3 py-2.5 text-amber-600 dark:text-amber-400">
+              <EyeOff className="h-4 w-4 shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">私密分组</p>
+                <p className="text-[11px] opacity-80">按 {togglePrivateHotkey} 切换显示</p>
+              </div>
+            </div>
+          )}
 
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={onClose}>

@@ -1,6 +1,6 @@
 [package]
 name = "KeyVault"
-version = "0.0.1"
+version = "0.0.2"
 description = "kv - KeyVault"
 authors = []
 edition = "2021"

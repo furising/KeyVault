@@ -1,6 +1,6 @@
 {
   "name": "KeyVault",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "KeyVault跨平台密码管理应用",
   "scripts": {
     "vite:dev": "vite --port 5173",
